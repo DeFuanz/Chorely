@@ -26,18 +26,18 @@ namespace Chorely.Areas.Identity.Pages.Account
     [AllowAnonymous]
     public class RegisterModel : PageModel
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly IUserStore<IdentityUser> _userStore;
-        private readonly IUserEmailStore<IdentityUser> _emailStore;
+        private readonly SignInManager<Administrator> _signInManager;
+        private readonly UserManager<Administrator> _userManager;
+        private readonly IUserStore<Administrator> _userStore;
+        private readonly IUserEmailStore<Administrator> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly RoleManager<IdentityRole> _roleStore;
 
         public RegisterModel(
-            UserManager<IdentityUser> userManager,
-            IUserStore<IdentityUser> userStore,
-            SignInManager<IdentityUser> signInManager,
+            UserManager<Administrator> userManager,
+            IUserStore<Administrator> userStore,
+            SignInManager<Administrator> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
             RoleManager<IdentityRole> roleStore)
@@ -163,30 +163,30 @@ namespace Chorely.Areas.Identity.Pages.Account
             return Page();
         }
 
-        private IdentityUser CreateUser()
+        private Administrator CreateUser()
         {
             try
             {
-                return Activator.CreateInstance<IdentityUser>();
+                return Activator.CreateInstance<Administrator>();
             }
             catch
             {
-                throw new InvalidOperationException($"Can't create an instance of '{nameof(IdentityUser)}'. " +
-                    $"Ensure that '{nameof(IdentityUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
+                throw new InvalidOperationException($"Can't create an instance of '{nameof(Administrator)}'. " +
+                    $"Ensure that '{nameof(Administrator)}' is not an abstract class and has a parameterless constructor, or alternatively " +
                     $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
             }
         }
 
-        private IUserEmailStore<IdentityUser> GetEmailStore()
+        private IUserEmailStore<Administrator> GetEmailStore()
         {
             if (!_userManager.SupportsUserEmail)
             {
                 throw new NotSupportedException("The default UI requires a user store with email support.");
             }
-            return (IUserEmailStore<IdentityUser>)_userStore;
+            return (IUserEmailStore<Administrator>)_userStore;
         }
 
-        private static async Task<IdentityResult> EnsureRole(RoleManager<IdentityRole> roleStore, UserManager<IdentityUser> usersManager, string uid, string role)
+        private static async Task<IdentityResult> EnsureRole(RoleManager<IdentityRole> roleStore, UserManager<Administrator> usersManager, string uid, string role)
         {
             var roleManager = roleStore;
 
