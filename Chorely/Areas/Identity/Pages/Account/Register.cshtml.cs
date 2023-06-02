@@ -16,7 +16,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace Chorely.Areas.Identity.Pages.Account
@@ -97,6 +99,18 @@ namespace Chorely.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Required]
+            public string SelectedUserRole { get; set; }
+        }
+
+        public static IEnumerable<SelectListItem> UserRoleOptions()
+        {
+            return new[]
+            {
+            new SelectListItem {Text = "Administrator", Value = "Administrator"},
+            new SelectListItem {Text = "Worker", Value = "Worker"}
+            };
         }
 
 
@@ -123,6 +137,7 @@ namespace Chorely.Areas.Identity.Pages.Account
                     _logger.LogInformation("User created a new account with password.");
 
                     var userId = await _userManager.GetUserIdAsync(user);
+
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(
@@ -175,6 +190,36 @@ namespace Chorely.Areas.Identity.Pages.Account
                 throw new NotSupportedException("The default UI requires a user store with email support.");
             }
             return (IUserEmailStore<IdentityUser>)_userStore;
+        }
+
+        private static async Task<IdentityResult> EnsureRole(IServiceProvider serviceProvider, string uid, string role)
+        {
+            var roleManager = serviceProvider.GetService<RoleManager<IdentityRole>>();
+
+            if (roleManager == null)
+            {
+                throw new Exception("roleManager null");
+            }
+
+            IdentityResult IR;
+
+            if (!await roleManager.RoleExistsAsync(role))
+            {
+                IR = await roleManager.CreateAsync(new IdentityRole(role));
+            }
+
+            var userManager = serviceProvider.GetService<UserManager<IdentityUser>>();
+
+            var user = await userManager.FindByIdAsync(uid);
+
+            if (user == null)
+            {
+                throw new Exception("Could not find user to ensure role");
+            }
+
+            IR = await userManager.AddToRoleAsync(user, role);
+
+            return IR;
         }
     }
 }
