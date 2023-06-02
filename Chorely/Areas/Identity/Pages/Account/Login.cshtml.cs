@@ -17,7 +17,6 @@ using Microsoft.Extensions.Logging;
 
 namespace Chorely.Areas.Identity.Pages.Account
 {
-    [AllowAnonymous]
     public class LoginModel : PageModel
     {
         private readonly SignInManager<IdentityUser> _signInManager;

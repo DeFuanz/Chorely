@@ -12,13 +12,12 @@ using Microsoft.Extensions.Logging;
 
 namespace Chorely.Areas.Identity.Pages.Account
 {
-    [AllowAnonymous]
     public class LogoutModel : PageModel
     {
-        private readonly SignInManager<Administrator> _signInManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<LogoutModel> _logger;
 
-        public LogoutModel(SignInManager<Administrator> signInManager, ILogger<LogoutModel> logger)
+        public LogoutModel(SignInManager<IdentityUser> signInManager, ILogger<LogoutModel> logger)
         {
             _signInManager = signInManager;
             _logger = logger;

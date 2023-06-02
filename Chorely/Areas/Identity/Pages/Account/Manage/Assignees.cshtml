@@ -1,4 +1,48 @@
 @page
-@model AssigneesPage
+@model ManageAssigneeModel
 
-<h1>List of assignees here</h1>
+<h1>Create Assignee Account</h1>
+
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        <h3>IdentityUsers Assignees</h3>
+        <ul>
+            @if (Model.Assignees != null)
+            {
+                foreach (var assignee in Model.Assignees)
+                {
+                    <li>@assignee.UserName</li>
+                }
+            }
+        </ul>
+    </div>
+    <div class="col-md-6">
+        <h3>Create New Assignee</h3>
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label for="Username">Username:</label>
+                <input type="text" class="form-control" id="Username" name="Input.Username" required />
+                <span asp-validation-for="Input.Username" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="Password">Password:</label>
+                <input type="password" class="form-control" id="Password" name="Input.Password" required />
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="ConfirmPassword">Confirm Password:</label>
+                <input type="password" class="form-control" id="ConfirmPassword" name="Input.ConfirmPassword"
+                    required />
+                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Create Assignee</button>
+        </form>
+    </div>
+</div>

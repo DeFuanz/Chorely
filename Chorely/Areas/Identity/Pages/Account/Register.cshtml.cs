@@ -16,31 +16,28 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace Chorely.Areas.Identity.Pages.Account
 {
-    [AllowAnonymous]
     public class RegisterModel : PageModel
     {
-        private readonly SignInManager<Administrator> _signInManager;
-        private readonly UserManager<Administrator> _userManager;
-        private readonly IUserStore<Administrator> _userStore;
-        private readonly IUserEmailStore<Administrator> _emailStore;
+        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly IUserStore<IdentityUser> _userStore;
+        private readonly IUserEmailStore<IdentityUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
-        private readonly RoleManager<IdentityRole> _roleStore;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public RegisterModel(
-            UserManager<Administrator> userManager,
-            IUserStore<Administrator> userStore,
-            SignInManager<Administrator> signInManager,
+            UserManager<IdentityUser> userManager,
+            IUserStore<IdentityUser> userStore,
+            SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            RoleManager<IdentityRole> roleStore)
+            RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -48,7 +45,7 @@ namespace Chorely.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
-            _roleStore = roleStore;
+            _roleManager = roleManager;
         }
 
         /// <summary>
@@ -129,9 +126,7 @@ namespace Chorely.Areas.Identity.Pages.Account
                     _logger.LogInformation("User created a new account with password.");
 
                     var userId = await _userManager.GetUserIdAsync(user);
-
-                    await EnsureRole(_roleStore, _userManager, userId, "Administrator");
-
+                    await EnsureRole(_roleManager, _userManager, userId, "IdentityUser");
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(
@@ -163,30 +158,31 @@ namespace Chorely.Areas.Identity.Pages.Account
             return Page();
         }
 
-        private Administrator CreateUser()
+        private IdentityUser CreateUser()
         {
             try
             {
-                return Activator.CreateInstance<Administrator>();
+                return Activator.CreateInstance<IdentityUser>();
             }
             catch
             {
-                throw new InvalidOperationException($"Can't create an instance of '{nameof(Administrator)}'. " +
-                    $"Ensure that '{nameof(Administrator)}' is not an abstract class and has a parameterless constructor, or alternatively " +
+                throw new InvalidOperationException($"Can't create an instance of '{nameof(IdentityUser)}'. " +
+                    $"Ensure that '{nameof(IdentityUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
                     $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
             }
         }
 
-        private IUserEmailStore<Administrator> GetEmailStore()
+        private IUserEmailStore<IdentityUser> GetEmailStore()
         {
             if (!_userManager.SupportsUserEmail)
             {
                 throw new NotSupportedException("The default UI requires a user store with email support.");
             }
-            return (IUserEmailStore<Administrator>)_userStore;
+            return (IUserEmailStore<IdentityUser>)_userStore;
         }
 
-        private static async Task<IdentityResult> EnsureRole(RoleManager<IdentityRole> roleStore, UserManager<Administrator> usersManager, string uid, string role)
+        private static async Task<IdentityResult> EnsureRole(RoleManager<IdentityRole> roleStore, UserManager<IdentityUser> usersManager,
+                                                              string uid, string role)
         {
             var roleManager = roleStore;
 
@@ -196,7 +192,6 @@ namespace Chorely.Areas.Identity.Pages.Account
             }
 
             IdentityResult IR;
-
             if (!await roleManager.RoleExistsAsync(role))
             {
                 IR = await roleManager.CreateAsync(new IdentityRole(role));
@@ -204,11 +199,16 @@ namespace Chorely.Areas.Identity.Pages.Account
 
             var userManager = usersManager;
 
+            //if (userManager == null)
+            //{
+            //    throw new Exception("userManager is null");
+            //}
+
             var user = await userManager.FindByIdAsync(uid);
 
             if (user == null)
             {
-                throw new Exception("Could not find user to ensure role");
+                throw new Exception("The testUserPw password was probably not strong enough!");
             }
 
             IR = await userManager.AddToRoleAsync(user, role);

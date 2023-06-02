@@ -3,6 +3,7 @@ using System;
 using Chorley.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Chorely.Migrations
 {
     [DbContext(typeof(ChorleyContext))]
-    partial class ChorleyContextModelSnapshot : ModelSnapshot
+    [Migration("20230602201446_RevertedtoIdentityUserOnly")]
+    partial class RevertedtoIdentityUserOnly
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.5");

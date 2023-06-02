@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Chorely.Controllers
 {
-    [Authorize(Roles = "Administrator, Worker")]
+    [Authorize(Roles = "IdentityUser, Worker")]
     public class ChoreController : Controller
     {
         private readonly ChorleyContext _context;
@@ -48,7 +48,7 @@ namespace Chorely.Controllers
         }
 
         // GET: Chore/Create
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "IdentityUser")]
         public IActionResult Create()
         {
             return View();
@@ -71,7 +71,7 @@ namespace Chorely.Controllers
         }
 
         // GET: Chore/Edit/5
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "IdentityUser")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Chore == null)
@@ -123,7 +123,7 @@ namespace Chorely.Controllers
         }
 
         // GET: Chore/Delete/5
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "IdentityUser")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Chore == null)
