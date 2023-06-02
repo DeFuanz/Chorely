@@ -18665,6 +18665,21 @@
       "FileKind": "mvc"
     },
     {
+      "FilePath": "c:\\Users\\Juant\\ChorelySolution\\Chorely\\Areas\\Identity\\Pages\\Account\\Manage\\_Layout.cshtml",
+      "TargetPath": "Areas\\Identity\\Pages\\Account\\Manage\\_Layout.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\Juant\\ChorelySolution\\Chorely\\Areas\\Identity\\Pages\\Account\\Manage\\_ManageNav.cshtml",
+      "TargetPath": "Areas\\Identity\\Pages\\Account\\Manage\\_ManageNav.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\Juant\\ChorelySolution\\Chorely\\Areas\\Identity\\Pages\\Account\\Manage\\_ViewImports.cshtml",
+      "TargetPath": "Areas\\Identity\\Pages\\Account\\Manage\\_ViewImports.cshtml",
+      "FileKind": "mvc"
+    },
+    {
       "FilePath": "c:\\Users\\Juant\\ChorelySolution\\Chorely\\Views\\Chore\\Details.cshtml",
       "TargetPath": "Views\\Chore\\Details.cshtml",
       "FileKind": "mvc"

@@ -103,18 +103,6 @@ namespace Chorely.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
-
-            [Required]
-            public string SelectedUserRole { get; set; }
-        }
-
-        public static IEnumerable<SelectListItem> UserRoleOptions()
-        {
-            return new[]
-            {
-            new SelectListItem {Text = "Administrator", Value = "Administrator"},
-            new SelectListItem {Text = "Worker", Value = "Worker"}
-            };
         }
 
 
@@ -142,7 +130,7 @@ namespace Chorely.Areas.Identity.Pages.Account
 
                     var userId = await _userManager.GetUserIdAsync(user);
 
-                    await EnsureRole(_roleStore, _userManager, userId, Input.SelectedUserRole);
+                    await EnsureRole(_roleStore, _userManager, userId, "Administrator");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));

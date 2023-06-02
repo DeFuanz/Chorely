@@ -4,6 +4,7 @@ using Chorley.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 if (builder.Environment.IsDevelopment())
@@ -17,7 +18,7 @@ else
         options.UseSqlServer(builder.Configuration.GetConnectionString("ProductionChorleyContext")));
 }
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddRoles<IdentityRole>().AddEntityFrameworkStores<ChorleyContext>();
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false).AddRoles<IdentityRole>().AddEntityFrameworkStores<ChorleyContext>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
