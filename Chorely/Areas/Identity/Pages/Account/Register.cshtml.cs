@@ -23,6 +23,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Chorely.Areas.Identity.Pages.Account
 {
+    [AllowAnonymous]
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<IdentityUser> _signInManager;
@@ -31,13 +32,15 @@ namespace Chorely.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<IdentityUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly RoleManager<IdentityRole> _roleStore;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
             IUserStore<IdentityUser> userStore,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            RoleManager<IdentityRole> roleStore)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -45,6 +48,7 @@ namespace Chorely.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _roleStore = roleStore;
         }
 
         /// <summary>
@@ -138,6 +142,8 @@ namespace Chorely.Areas.Identity.Pages.Account
 
                     var userId = await _userManager.GetUserIdAsync(user);
 
+                    await EnsureRole(_roleStore, _userManager, userId, Input.SelectedUserRole);
+
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(
@@ -192,9 +198,9 @@ namespace Chorely.Areas.Identity.Pages.Account
             return (IUserEmailStore<IdentityUser>)_userStore;
         }
 
-        private static async Task<IdentityResult> EnsureRole(IServiceProvider serviceProvider, string uid, string role)
+        private static async Task<IdentityResult> EnsureRole(RoleManager<IdentityRole> roleStore, UserManager<IdentityUser> usersManager, string uid, string role)
         {
-            var roleManager = serviceProvider.GetService<RoleManager<IdentityRole>>();
+            var roleManager = roleStore;
 
             if (roleManager == null)
             {
@@ -208,7 +214,7 @@ namespace Chorely.Areas.Identity.Pages.Account
                 IR = await roleManager.CreateAsync(new IdentityRole(role));
             }
 
-            var userManager = serviceProvider.GetService<UserManager<IdentityUser>>();
+            var userManager = usersManager;
 
             var user = await userManager.FindByIdAsync(uid);
 
