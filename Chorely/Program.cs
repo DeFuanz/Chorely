@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Chorley.Data;
+using Microsoft.AspNetCore.Identity;
+using Chorely.Areas.Identity.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 if (builder.Environment.IsDevelopment())
@@ -13,6 +15,8 @@ else
     builder.Services.AddDbContext<ChorleyContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("ProductionChorleyContext")));
 }
+
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ChorleyContext>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -37,5 +41,6 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+app.MapRazorPages();
 
 app.Run();
