@@ -18655,6 +18655,11 @@
       "FileKind": "mvc"
     },
     {
+      "FilePath": "c:\\Users\\Juant\\ChorelySolution\\Chorely\\Areas\\Identity\\Pages\\Account\\RegisterConfirmation.cshtml",
+      "TargetPath": "Areas\\Identity\\Pages\\Account\\RegisterConfirmation.cshtml",
+      "FileKind": "mvc"
+    },
+    {
       "FilePath": "c:\\Users\\Juant\\ChorelySolution\\Chorely\\Views\\Chore\\Index.cshtml",
       "TargetPath": "Views\\Chore\\Index.cshtml",
       "FileKind": "mvc"
@@ -18665,8 +18670,18 @@
       "FileKind": "mvc"
     },
     {
+      "FilePath": "c:\\Users\\Juant\\ChorelySolution\\Chorely\\Areas\\Identity\\Pages\\Account\\_ViewImports.cshtml",
+      "TargetPath": "Areas\\Identity\\Pages\\Account\\_ViewImports.cshtml",
+      "FileKind": "mvc"
+    },
+    {
       "FilePath": "c:\\Users\\Juant\\ChorelySolution\\Chorely\\Views\\Chore\\Edit.cshtml",
       "TargetPath": "Views\\Chore\\Edit.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\Juant\\ChorelySolution\\Chorely\\Areas\\Identity\\Pages\\Account\\Logout.cshtml",
+      "TargetPath": "Areas\\Identity\\Pages\\Account\\Logout.cshtml",
       "FileKind": "mvc"
     },
     {
@@ -18695,6 +18710,11 @@
       "FileKind": "mvc"
     },
     {
+      "FilePath": "c:\\Users\\Juant\\ChorelySolution\\Chorely\\Areas\\Identity\\Pages\\_ViewImports.cshtml",
+      "TargetPath": "Areas\\Identity\\Pages\\_ViewImports.cshtml",
+      "FileKind": "mvc"
+    },
+    {
       "FilePath": "c:\\Users\\Juant\\ChorelySolution\\Chorely\\Views\\Shared\\Error.cshtml",
       "TargetPath": "Views\\Shared\\Error.cshtml",
       "FileKind": "mvc"
@@ -18712,6 +18732,16 @@
     {
       "FilePath": "c:\\Users\\Juant\\ChorelySolution\\Chorely\\Views\\Shared\\_ValidationScriptsPartial.cshtml",
       "TargetPath": "Views\\Shared\\_ValidationScriptsPartial.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\Juant\\ChorelySolution\\Chorely\\Areas\\Identity\\Pages\\Account\\Login.cshtml",
+      "TargetPath": "Areas\\Identity\\Pages\\Account\\Login.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\Juant\\ChorelySolution\\Chorely\\Areas\\Identity\\Pages\\Account\\Register.cshtml",
+      "TargetPath": "Areas\\Identity\\Pages\\Account\\Register.cshtml",
       "FileKind": "mvc"
     },
     {
