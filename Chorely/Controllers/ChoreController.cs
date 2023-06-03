@@ -8,25 +8,34 @@ using Microsoft.EntityFrameworkCore;
 using Chorely.Models;
 using Chorley.Data;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace Chorely.Controllers
 {
-    [Authorize(Roles = "IdentityUser, Worker")]
+    [Authorize(Roles = "Administrator, Assignee")]
     public class ChoreController : Controller
     {
         private readonly ChorleyContext _context;
+        private readonly UserManager<ChorelyUser> _userManager;
 
-        public ChoreController(ChorleyContext context)
+        public ChoreController(ChorleyContext context, UserManager<ChorelyUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Chore
         public async Task<IActionResult> Index()
         {
-              return _context.Chore != null ? 
-                          View(await _context.Chore.ToListAsync()) :
-                          Problem("Entity set 'ChorleyContext.Chore'  is null.");
+            var userId = _userManager.GetUserId(User);
+
+            var chores = _context.Chore.Where(i => i.CreatedById == userId).ToList();
+
+            decimal balance = chores.Where(c => c.Completed).Sum(c => c.Value);
+
+            ViewBag.Balance = balance;
+
+            return View(chores);
         }
 
         // GET: Chore/Details/5
@@ -48,9 +57,24 @@ namespace Chorely.Controllers
         }
 
         // GET: Chore/Create
-        [Authorize(Roles = "IdentityUser")]
-        public IActionResult Create()
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> Create()
         {
+            var userId = _userManager.GetUserId(User);
+            var assignees = await  _userManager.Users.Where(i => i.AssignedAdministratorId == userId).ToListAsync();
+
+            List<SelectListItem> assigneeSelectList = assignees.ConvertAll(a =>
+            {
+                return new SelectListItem()
+                {
+                    Text = a.UserName,
+                    Value = a.Id,
+                    Selected = false
+                };
+            });
+
+            ViewBag.AssigneeList = assigneeSelectList;
+
             return View();
         }
 
@@ -59,10 +83,11 @@ namespace Chorely.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,AssignedDate,Completed,Value,Notes")] Chore chore)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,AssignedDate,Completed,Value,Notes,AssignedToId")] Chore chore)
         {
             if (ModelState.IsValid)
             {
+                chore.CreatedById = _userManager.GetUserId(User);
                 _context.Add(chore);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -71,7 +96,7 @@ namespace Chorely.Controllers
         }
 
         // GET: Chore/Edit/5
-        [Authorize(Roles = "IdentityUser")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Chore == null)
@@ -84,6 +109,22 @@ namespace Chorely.Controllers
             {
                 return NotFound();
             }
+
+            var userId = _userManager.GetUserId(User);
+            var assignees = await  _userManager.Users.Where(i => i.AssignedAdministratorId == userId).ToListAsync();
+
+            List<SelectListItem> assigneeSelectList = assignees.ConvertAll(a =>
+            {
+                return new SelectListItem()
+                {
+                    Text = a.UserName,
+                    Value = a.Id,
+                    Selected = false
+                };
+            });
+
+            ViewBag.AssigneeList = assigneeSelectList;
+
             return View(chore);
         }
 
@@ -92,7 +133,7 @@ namespace Chorely.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,AssignedDate,Completed,Value,Notes")] Chore chore)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,AssignedDate,Completed,Value,Notes,AssignedToId")] Chore chore)
         {
             if (id != chore.Id)
             {
@@ -103,6 +144,7 @@ namespace Chorely.Controllers
             {
                 try
                 {
+                    chore.CreatedById = _userManager.GetUserId(User);
                     _context.Update(chore);
                     await _context.SaveChangesAsync();
                 }
@@ -123,7 +165,7 @@ namespace Chorely.Controllers
         }
 
         // GET: Chore/Delete/5
-        [Authorize(Roles = "IdentityUser")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Chore == null)
@@ -155,14 +197,14 @@ namespace Chorely.Controllers
             {
                 _context.Chore.Remove(chore);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ChoreExists(int id)
         {
-          return (_context.Chore?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Chore?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

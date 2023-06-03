@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Chorley.Data
 {
-    public class ChorleyContext : IdentityDbContext<IdentityUser>
+    public class ChorleyContext : IdentityDbContext<ChorelyUser>
     {
         public ChorleyContext (DbContextOptions<ChorleyContext> options)
             : base(options)

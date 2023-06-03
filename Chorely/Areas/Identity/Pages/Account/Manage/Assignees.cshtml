@@ -1,20 +1,24 @@
 @page
 @model ManageAssigneeModel
 
-<h1>Create Assignee Account</h1>
+<h1>Manage Assignee accounts</h1>
 
 <hr />
 
 <div class="row">
     <div class="col-md-6">
-        <h3>IdentityUsers Assignees</h3>
+        <h3>My Assignees</h3>
         <ul>
-            @if (Model.Assignees != null)
+            @if (Model.Assignees != null && Model.Assignees.Count() > 0)
             {
                 foreach (var assignee in Model.Assignees)
                 {
                     <li>@assignee.UserName</li>
                 }
+            }
+            else
+            {
+                <p>No current Assignees</p>
             }
         </ul>
     </div>

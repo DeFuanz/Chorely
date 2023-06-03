@@ -10,8 +10,12 @@ public class Chore
     public string? Description { get; set; }
 
     [DataType(DataType.Date)]
-    public DateTime AssignedDate {get; set;}
+    public DateTime AssignedDate { get; set; }
     public bool Completed { get; set; } = false;
     public decimal Value { get; set; }
     public string? Notes { get; set; }
+
+    //FK to admin and assignees
+    public string? CreatedById { get; set; }
+    public string? AssignedToId { get; set; }
 }

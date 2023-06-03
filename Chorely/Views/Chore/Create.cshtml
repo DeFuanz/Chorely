@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Create";
+    List<SelectListItem> assigneeList = ViewBag.AssigneeList; 
 }
 
 <h1>Create</h1>
@@ -27,11 +28,6 @@
                 <input asp-for="AssignedDate" class="form-control" />
                 <span asp-validation-for="AssignedDate" class="text-danger"></span>
             </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Completed" /> @Html.DisplayNameFor(model => model.Completed)
-                </label>
-            </div>
             <div class="form-group">
                 <label asp-for="Value" class="control-label"></label>
                 <input asp-for="Value" class="form-control" />
@@ -41,6 +37,10 @@
                 <label asp-for="Notes" class="control-label"></label>
                 <input asp-for="Notes" class="form-control" />
                 <span asp-validation-for="Notes" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                @Html.DropDownList("AssignedToId", assigneeList, new { @class = "form-control selectpicker", data_live_search = "true" });
+                <span asp-validation-for="AssignedToId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

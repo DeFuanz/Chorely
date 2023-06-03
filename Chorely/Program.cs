@@ -18,7 +18,7 @@ else
         options.UseSqlServer(builder.Configuration.GetConnectionString("ProductionChorleyContext")));
 }
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false).AddRoles<IdentityRole>().AddEntityFrameworkStores<ChorleyContext>();
+builder.Services.AddIdentity<ChorelyUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false).AddRoles<IdentityRole>().AddEntityFrameworkStores<ChorleyContext>().AddDefaultUI().AddDefaultTokenProviders();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
