@@ -45,7 +45,7 @@
                 <span asp-validation-for="Notes" class="text-danger"></span>
             </div>
             <div class="form-group">
-                @Html.DropDownList("AssignedToId", assigneeList, new { @class = "form-control selectpicker", data_live_search = "true" });
+                @Html.DropDownList("AssignedToId", assigneeList, new { @class = "form-control selectpicker", data_live_search = "true" })
                 <span asp-validation-for="AssignedToId" class="text-danger"></span>
             </div>
             <div class="form-group">

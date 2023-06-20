@@ -4,14 +4,17 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Chore Dashboard</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    @if (User.IsInRole("Administrator"))
+    {
+        <a asp-action="Create">Create New Chore</a>
+    }
 </p>
 <div class="container">
-    <div class="row">
-        <div class="col-sm-6 col-lg-9">
+    <div class="row flex-column-reverse flex-md-row">
+        <div class="col-md-9">
             <table class="table">
                 <thead>
                     <tr>
@@ -46,16 +49,21 @@
                                 @Html.DisplayFor(modelItem => item.Value)
                             </td>
                             <td>
-                                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                                @if (User.IsInRole("Administrator"))
+                                {
+                                    <p> | </p>
+                                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                                    <p> | </p>
+                                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                }
                             </td>
                         </tr>
                     }
                 </tbody>
             </table>
         </div>
-        <div class="col-sm-6 col-lg-3">
+        <div class="col-md-3">
             <p>Balance</p>
             <p>@ViewBag.balance</p>
         </div>

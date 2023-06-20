@@ -29,7 +29,16 @@ namespace Chorely.Controllers
         {
             var userId = _userManager.GetUserId(User);
 
-            var chores = _context.Chore.Where(i => i.CreatedById == userId).ToList();
+            var chores = new List<Chore>();
+
+            if (User.IsInRole("Administrator"))
+            {
+                chores = await _context.Chore.Where(i => i.CreatedById == userId).ToListAsync();
+            }
+            else
+            {
+                chores = await _context.Chore.Where(i => i.AssignedToId == userId).ToListAsync();
+            }
 
             decimal balance = chores.Where(c => c.Completed).Sum(c => c.Value);
 
