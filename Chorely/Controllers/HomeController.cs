@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Chorely.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace Chorely.Controllers;
 
@@ -9,14 +10,20 @@ namespace Chorely.Controllers;
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
+    private readonly SignInManager<ChorelyUser> _signInManager; 
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(ILogger<HomeController> logger, SignInManager<ChorelyUser> signInManager)
     {
         _logger = logger;
+        _signInManager = signInManager;
     }
 
     public IActionResult Index()
     {
+        if (_signInManager.IsSignedIn(User))
+        {
+            return LocalRedirect("~/Chore");
+        }
         return View();
     }
 

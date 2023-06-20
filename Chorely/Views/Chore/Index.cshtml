@@ -25,10 +25,10 @@
                             @Html.DisplayNameFor(model => model.Description)
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.Completed)
+                            @Html.DisplayNameFor(model => model.Value)
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.Value)
+                            @Html.DisplayNameFor(model => model.Completed)
                         </th>
                     </tr>
                 </thead>
@@ -43,18 +43,18 @@
                                 @Html.DisplayFor(modelItem => item.Description)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Completed)
+                                <text>$</text>@Html.DisplayFor(modelItem => item.Value)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Value)
+                                @Html.DisplayFor(modelItem => item.Completed)
                             </td>
                             <td>
                                 <a asp-action="Details" asp-route-id="@item.Id">Details</a>
                                 @if (User.IsInRole("Administrator"))
                                 {
-                                    <p> | </p>
+                                    <text> | </text>
                                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                                    <p> | </p>
+                                    <text> | </text>
                                     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                                 }
                             </td>
@@ -65,7 +65,7 @@
         </div>
         <div class="col-md-3">
             <p>Balance</p>
-            <p>@ViewBag.balance</p>
+            <p>$@ViewBag.balance</p>
         </div>
     </div>
 </div>
