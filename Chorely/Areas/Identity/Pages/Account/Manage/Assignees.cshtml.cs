@@ -3,6 +3,7 @@ using Chorley.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace Chorely.Areas.Identity.Pages.Account.Manage;
 
@@ -27,22 +28,22 @@ public class ManageAssigneeModel : PageModel
     public class InputModel
     {
         [Required]
-        public string Username { get; set; }
+        public string Username { get; set; } = string.Empty;
 
         [Required]
         [DataType(DataType.Password)]
-        public string Password { get; set; }
+        public string Password { get; set; } = string.Empty;
 
         [Required]
         [DataType(DataType.Password)]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
-        public string ConfirmPassword { get; set; }
+        public string ConfirmPassword { get; set; } = string.Empty;
     }
 
     public async void OnGet()
     {
         var adminId = _userManager.GetUserId(User);
-        Assignees = _userManager.Users.Where(a => a.AssignedAdministratorId == adminId).ToList();
+        Assignees = await _userManager.Users.Where(a => a.AssignedAdministratorId == adminId).ToListAsync();
     }
 
     public async Task<IActionResult> OnPostAsync()
